@@ -1,26 +1,15 @@
 {
-  "index": "Introduction",
-  "getting-started": "Getting Started",
-  "for-organizers": "For Event Organizers",
-  "for-fans": "For Fans & Attendees",
-  "technical": {
-    "title": "Technical Documentation",
-    "type": "page"
+  "index": "Chapter 1 · Momentmm Foundations",
+  "getting-started": "Chapter 2 · Platform Overview", 
+  "for-organizers": "Chapter 3 · Event Organizers",
+  "for-fans": "Chapter 4 · Fans & Attendees",
+  "support": "Chapter 5 · Support & Resources",
+  "part-dev": {
+    "type": "separator",
+    "title": "Developer Documentation"
   },
-  "api-reference": {
-    "title": "API Reference",
-    "type": "page"
-  },
-  "smart-contracts": {
-    "title": "Smart Contracts",
-    "type": "page"
-  },
-  "ecosystem": {
-    "title": "Ecosystem & Token",
-    "type": "page"
-  },
-  "support": {
-    "title": "Support",
-    "type": "page"
-  }
+  "technical": "Technical Architecture",
+  "smart-contracts": "Smart Contracts",
+  "ecosystem": "Ecosystem & Token",
+  "api-reference": "API Reference"
 }

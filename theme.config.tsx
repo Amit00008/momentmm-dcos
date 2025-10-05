@@ -2,7 +2,7 @@ import React from 'react'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 
 const config: DocsThemeConfig = {
-  logo: <span>Momentmm.xyz</span>,
+  logo: <span className="momentmm-logo">Momentmm.xyz</span>,
   project: {
     link: 'https://github.com/momentmm',
   },
@@ -10,6 +10,8 @@ const config: DocsThemeConfig = {
     link: 'https://discord.gg/momentmm',
   },
   docsRepositoryBase: 'https://github.com/momentmm/docs',
+  primaryHue: { light: 265, dark: 275 },
+  primarySaturation: 70,
   footer: {
     text: 'Momentmm.xyz - Official Documentation',
   },

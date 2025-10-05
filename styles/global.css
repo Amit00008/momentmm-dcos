@@ -1,0 +1,101 @@
+:root {
+  --lavender-50: #f8f6ff;
+  --lavender-100: #f1edff;
+  --lavender-200: #e2dcff;
+  --lavender-300: #ccbff7;
+  --lavender-700: #443c6b;
+  --nextra-primary-hue: 265;
+  --nextra-primary-saturation: 70%;
+  --nextra-primary-lightness: 55%;
+}
+
+html {
+  min-height: 100%;
+  background-color: var(--lavender-50);
+}
+
+body {
+  background: radial-gradient(circle at 15% 20%, rgba(226, 220, 255, 0.65), transparent 45%),
+              radial-gradient(circle at 80% 10%, rgba(204, 191, 247, 0.55), transparent 55%),
+              radial-gradient(circle at 50% 90%, rgba(241, 237, 255, 0.6), transparent 60%),
+              var(--lavender-50);
+  color: var(--lavender-700);
+}
+
+.dark body {
+  background: radial-gradient(circle at 15% 20%, rgba(60, 50, 100, 0.45), transparent 40%),
+              radial-gradient(circle at 80% 10%, rgba(80, 70, 130, 0.4), transparent 55%),
+              #161324;
+  color: #f5f4ff;
+}
+
+.nextra-nav-container-blur {
+  background: rgba(248, 246, 255, 0.8);
+  -webkit-backdrop-filter: saturate(150%) blur(16px);
+  backdrop-filter: saturate(150%) blur(16px);
+}
+
+.dark .nextra-nav-container-blur {
+  background: rgba(31, 26, 54, 0.78);
+}
+
+
+/* Completely hide ALL Nextra UI elements that create patches */
+.nextra-feedback,
+[class*="feedback"],
+[class*="Feedback"], 
+.nextra-edit-link,
+[class*="edit"],
+[data-theme] *[class*="nx-"],
+*[class*="nx-bg"],
+*[class*="nx-shadow"],
+*[class*="nx-border"],
+*[class*="nx-rounded"] {
+  display: none !important;
+}
+
+/* Backup: Make any remaining elements completely transparent */
+.nextra-feedback,
+.nextra-feedback *,
+div[class*="feedback"],
+div[class*="Feedback"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Hide edit links completely or make them invisible */
+.nextra-edit-link,
+a[class*="edit"],
+a[href*="edit"] {
+  display: none !important;
+}
+
+/* Alternative: Make completely invisible */
+.nextra-edit-link {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  color: var(--lavender-700) !important;
+  opacity: 0.6;
+}
+
+.dark .nextra-edit-link {
+  color: #efeaff !important;
+}
+
+.momentmm-logo {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #443c6b;
+}
+
+.dark .momentmm-logo {
+  color: #d8d2ff;
+}

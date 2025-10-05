@@ -1,62 +1,73 @@
-# Momentmm.xyz Official Documentation
+# Momentmm.xyz Documentation
 
-Welcome to the official documentation for **Momentmm.xyz**, the next-generation event ticketing platform built on Web3 principles to revolutionize the live events industry.
-
-## What is Momentmm?
-
-Momentmm is a revolutionary NFT-based ticketing platform designed to restore fairness, transparency, and value to the live event ecosystem. By leveraging blockchain technology, we eliminate ticket scalping, guarantee authenticity, and create new revenue streams for creators while providing fans with true ownership of their tickets.
-
-### Key Features
-
-- **🎫 NFT Tickets**: Each ticket is a unique, non-fungible token on the Polygon blockchain
-- **🚫 Anti-Scalping**: Programmable price caps prevent predatory resale practices  
-- **💰 Creator Royalties**: Automated, perpetual royalties on all secondary sales
-- **🔒 Secure Verification**: Cryptographic verification eliminates counterfeiting
-- **🌱 Fan-Creator Connection**: Direct engagement tools for lasting community relationships
-
-## The Problem We Solve
-
-The current ticketing industry is plagued by:
-
-- **Scalping Epidemic**: Over 40% of high-demand tickets are purchased by bots
-- **Price Gouging**: Tickets resold at 5,500%+ markup (e.g., ₹12,500 → ₹707,000)
-- **Counterfeiting**: Vulnerable PDF/QR codes easily duplicated
-- **No Creator Benefits**: Zero revenue from secondary market transactions
-- **Poor Fan Experience**: Server crashes, sold-out events, and fraud
-
-## Our Solution
-
-Momentmm transforms tickets from disposable access passes into **digital assets** that provide:
-
-### For Fans
-- True ownership of tickets as NFTs
-- Guaranteed authenticity and security
-- Fair resale markets with price protection
-- Digital collectibles and memorabilia
-- Direct access to creator communities
-
-### For Creators
-- Automated royalties on all resales (forever)
-- Anti-scalping protection with programmable rules
-- Direct fan engagement tools
-- Verifiable attendee data
-- New revenue streams from digital merchandise
-
-## Quick Start
-
-Ready to get started? Choose your path:
-
-- **[For Event Organizers →](/for-organizers)** - Learn how to create and manage events
-- **[For Fans & Attendees →](/for-fans)** - Discover how to buy and use NFT tickets
-- **[Technical Documentation →](/technical)** - Deep dive into our architecture
-- **[API Reference →](/api-reference)** - Integrate with our platform
-
-## Why Choose Momentmm?
-
-Built specifically for the Indian market, Momentmm addresses the unique challenges of our rapidly growing Web3 ecosystem. With over 100 million crypto users and a deep developer talent pool, India is perfectly positioned to lead the global adoption of NFT ticketing.
-
-Our platform combines the security of blockchain technology with the accessibility of familiar payment methods, making Web3 ticketing accessible to mainstream users while providing the advanced features that crypto-native creators demand.
+Welcome to the reference site for **Momentmm.xyz**, a ticketing platform that uses blockchain records to make event access clear, verifiable, and fair for everyone involved.
 
 ---
 
-*Ready to revolutionize your event experience? [Get started today →](/getting-started)*
+## 1. Understanding Momentmm
+
+### 1.1 What Is Momentmm?
+
+Momentmm stores every ticket as a **Non-Fungible Token (NFT)** instead of a PDF or static QR code. Each NFT is minted on Polygon, assigned to the fan’s wallet, and carries the event details, artwork, and rules that govern how it can be used or resold. Because ownership sits on-chain, a ticket cannot be forged or duplicated, and its full history is easy to verify.
+
+For organizers, this means they keep visibility into the full lifecycle of each ticket. For fans, it means the pass they buy and bring to the venue is the same pass the smart contract recognises—no middle steps, forwarding, or guesswork.
+
+### 1.2 The Problem: A Market Under Pressure
+
+India’s live event market is expanding, but the systems that handle ticket sales have not kept up:
+
+- Automated bots can buy more than **40%** of tickets for popular shows before fans even load the page.
+- Platform crashes are common. During the 2025 Coldplay sale, **13 million** visitors competed for **150,000** seats and resale prices spiked from ₹12,500 to more than ₹700,000 within minutes.
+- Duplicate PDFs and screenshots continue to appear at venue doors, forcing staff to play detective instead of focusing on entry.
+
+These patterns erode trust and remove predictable revenue from the people organising the events.
+
+### 1.3 The Solution: On-Chain Tickets With Built-In Rules
+
+Momentmm locks the important steps of ticketing into smart contracts so the process is consistent end to end:
+
+1. **Minting:** Organizers configure the event, upload artwork, and mint Polygon-based NFTs—one per seat.
+2. **Sale:** Fans pay with UPI, cards, or crypto and receive the NFT in their wallet immediately.
+3. **Authentication:** The mobile app generates a fresh QR code that verifies the wallet against on-chain ownership at the gate.
+4. **Resale:** Fans can list tickets on the built-in marketplace, but only within the limits (price caps, royalty splits, transfer windows) that the organizer set during minting.
+
+## 2. The Momentmm Advantage
+
+Momentmm’s innovations realign incentives across the ecosystem, converting leakage into shared value for fans and creators alike.
+
+### 2.1 Keeping Resale Prices Under Control
+
+Resale caps exist inside the contract itself. If the organizer says a ticket can only be listed at 110% of face value, any higher price is blocked on-chain. Fans avoid price spikes and organizers keep the market predictable.
+
+### 2.2 Sharing Secondary Revenue
+
+Instead of ending the relationship at the first sale, organizers can take a small fee from every later resale. Royalties route automatically to the wallets you specify—artists, venues, production partners, or charity—without manual reconciliation.
+
+### 2.3 Staying Connected With Attendees
+
+Tickets that stay in a fan’s wallet after the show become a simple way to deliver future rewards: discounts, audio files, meet-and-greet invites, or early access codes. You talk directly to verified attendees instead of depending on third-party algorithms.
+
+### 2.4 Transparent, Verifiable Markets
+
+Every ticket transfer leaves an auditable record. Organizers can view the current holder list and resale volume without waiting for reports. Fans know the ticket they buy is authentic because ownership is visible on-chain.
+
+| Feature | Legacy System | Momentmm Platform |
+| :---- | :---- | :---- |
+| **Ticket Authenticity** | Vulnerable to PDF/QR counterfeits | Guaranteed by blockchain immutability |
+| **Scalping Vulnerability** | Extremely high; dominated by bots | Programmatically controlled with price caps |
+| **Secondary Market Control** | None; third-party grey markets | Embedded rules enforced by smart contracts |
+| **Creator Royalties** | Zero on secondary sales | Automated and perpetual on every resale |
+| **Post-Event Utility** | Worthless after entry | Digital collectible and community access key |
+| **Fan Data Access** | Limited to original purchaser | Real-time visibility into current holders |
+| **Market Transparency** | Opaque supply and demand | Full ledger transparency |
+| **Fan Ownership** | Revocable license to attend | True, verifiable asset ownership |
+
+---
+
+### Where to Go Next
+
+- **[Chapter 3 · Event Organizers](/for-organizers)** dives into onboarding, minting, and smart contract rule design.
+- **[Chapter 4 · Fans & Attendees](/for-fans)** explains the wallet experience, marketplace flow, and on-chain collectibles.
+- **[Chapter 6 · Technical Architecture](/technical)** provides protocol-level insights for developers and integrators.
+
+Prefer a shorter tour? Head to **[Chapter 2 · Platform Overview](/getting-started)** for the quick-start version.

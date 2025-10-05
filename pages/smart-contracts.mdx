@@ -844,6 +844,41 @@ MetaTransactionReceiver: "0x6789012345678901234567890123456789012345"
 
 ## Integration Examples
 
+### Minimal Ticket Contract (Quickstart)
+
+For hackathons or proof-of-concept demos, a simplified contract can be sufficient. The following `TicketNFT` contract mirrors the snippet shared in the Momentmm quickstart kit and can mint unique tickets to any recipient wallet while storing metadata URIs on-chain.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract TicketNFT is ERC721URIStorage, Ownable {
+    uint256 public tokenCounter;
+
+    constructor() ERC721("Web3ConcertTicket", "WCT") {
+        tokenCounter = 1;
+    }
+
+    // Mint NFT to any wallet (server wallet in our case)
+    function mintNFT(address recipient, string memory tokenURI)
+        public
+        onlyOwner
+        returns (uint256)
+    {
+        uint256 newTokenId = tokenCounter;
+        _safeMint(recipient, newTokenId);
+        _setTokenURI(newTokenId, tokenURI);
+        tokenCounter += 1;
+        return newTokenId;
+    }
+}
+```
+
+> **Note:** This lightweight contract omits resale controls and royalties, so it should only be used for experimentation. Production deployments should rely on the full Momentmm suite documented above.
+
 ### JavaScript/Web3.js
 
 ```javascript
@@ -901,6 +936,12 @@ contract MyContract {
 }
 ```
 
+This contract provides the foundation for all NFT ticket functionality within the Momentmm ecosystem.
+
 ---
 
-*For API integration examples, see our [API Reference →](/api)*
+*Need implementation guidance? Check our [Technical Architecture →](/technical) for integration details.*
+
+---
+
+

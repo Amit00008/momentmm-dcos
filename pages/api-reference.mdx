@@ -1,0 +1,774 @@
+# API Reference
+
+This section provides comprehensive documentation for the Momentmm REST API, enabling developers to integrate with our platform and build custom applications on top of our infrastructure.
+
+## Base URL
+
+```
+Production: https://api.momentmm.xyz/v1
+Staging: https://staging-api.momentmm.xyz/v1
+```
+
+## Authentication
+
+All API requests require authentication using API keys or wallet signatures. Include your credentials in the request headers.
+
+### API Key Authentication
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+### Wallet Signature Authentication
+
+```http
+Authorization: Bearer WALLET_SIGNATURE
+X-Wallet-Address: 0x1234567890abcdef...
+X-Message: Login to Momentmm API
+X-Timestamp: 1640995200
+```
+
+## Rate Limits
+
+| Endpoint Type | Limit | Window |
+|---------------|-------|--------|
+| Authentication | 10 requests | 1 minute |
+| Read Operations | 100 requests | 1 minute |
+| Write Operations | 50 requests | 1 minute |
+| High-Volume Operations | 1000 requests | 1 minute |
+
+Rate limit headers are included in responses:
+```http
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1640995260
+```
+
+## Error Handling
+
+The API uses standard HTTP status codes and returns error details in JSON format:
+
+```json
+{
+  "error": {
+    "type": "invalid_request_error",
+    "message": "Missing required parameter: eventId",
+    "code": "MISSING_PARAMETER",
+    "details": {
+      "parameter": "eventId",
+      "expected_type": "string"
+    }
+  }
+}
+```
+
+### Common Error Codes
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `MISSING_PARAMETER` | 400 | Required parameter not provided |
+| `INVALID_PARAMETER` | 400 | Parameter value is invalid |
+| `UNAUTHORIZED` | 401 | Invalid or missing authentication |
+| `FORBIDDEN` | 403 | Insufficient permissions |
+| `NOT_FOUND` | 404 | Resource does not exist |
+| `RATE_LIMITED` | 429 | Rate limit exceeded |
+| `SERVER_ERROR` | 500 | Internal server error |
+
+## Events API
+
+### List Events
+
+Retrieve a paginated list of events.
+
+```http
+GET /events
+```
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `limit` | integer | No | Number of events per page (max 100) |
+| `offset` | integer | No | Number of events to skip |
+| `status` | string | No | Filter by status: `upcoming`, `live`, `completed` |
+| `category` | string | No | Filter by category |
+| `organizer` | string | No | Filter by organizer ID |
+
+#### Example Request
+
+```http
+GET /events?limit=20&offset=0&status=upcoming
+Authorization: Bearer YOUR_API_KEY
+```
+
+#### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "evt_123456",
+      "name": "Diljit Dosanjh 'Dil-Luminati' Tour",
+      "description": "An unforgettable musical experience...",
+      "date": "2026-10-15T19:00:00Z",
+      "venue": {
+        "name": "Jawaharlal Nehru Stadium",
+        "address": "Delhi, India",
+        "capacity": 60000
+      },
+      "organizer": {
+        "id": "org_789",
+        "name": "Live Events India"
+      },
+      "tickets": {
+        "total": 50000,
+        "sold": 48950,
+        "available": 1050
+      },
+      "pricing": {
+        "min": 500,
+        "max": 2500,
+        "currency": "INR"
+      },
+      "status": "upcoming",
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "offset": 0,
+    "total": 150,
+    "has_more": true
+  }
+}
+```
+
+### Get Event Details
+
+Retrieve detailed information about a specific event.
+
+```http
+GET /events/{event_id}
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `event_id` | string | Yes | Unique event identifier |
+
+#### Example Response
+
+```json
+{
+  "id": "evt_123456",
+  "name": "Diljit Dosanjh 'Dil-Luminati' Tour",
+  "description": "An unforgettable musical experience featuring...",
+  "date": "2026-10-15T19:00:00Z",
+  "venue": {
+    "name": "Jawaharlal Nehru Stadium",
+    "address": "Delhi, India",
+    "capacity": 60000,
+    "coordinates": {
+      "lat": 28.6139,
+      "lng": 77.2090
+    }
+  },
+  "organizer": {
+    "id": "org_789",
+    "name": "Live Events India",
+    "verified": true
+  },
+  "tickets": {
+    "total": 50000,
+    "sold": 48950,
+    "available": 1050,
+    "tiers": [
+      {
+        "name": "General Admission",
+        "price": 500,
+        "quantity": 40000,
+        "sold": 38950
+      },
+      {
+        "name": "VIP",
+        "price": 1500,
+        "quantity": 10000,
+        "sold": 10000
+      }
+    ]
+  },
+  "rules": {
+    "max_resale_price": 1100,
+    "royalty_fee": 500,
+    "transfer_allowed": true
+  },
+  "metadata": {
+    "contract_address": "0x1234567890abcdef...",
+    "token_standard": "ERC-721",
+    "network": "polygon"
+  },
+  "status": "upcoming",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-20T15:45:00Z"
+}
+```
+
+### Create Event
+
+Create a new event (Organizer only).
+
+```http
+POST /events
+```
+
+#### Request Body
+
+```json
+{
+  "name": "Event Name",
+  "description": "Event description",
+  "date": "2026-10-15T19:00:00Z",
+  "venue": {
+    "name": "Venue Name",
+    "address": "Venue Address",
+    "capacity": 1000
+  },
+  "tickets": {
+    "tiers": [
+      {
+        "name": "General",
+        "price": 500,
+        "quantity": 800
+      },
+      {
+        "name": "VIP",
+        "price": 1500,
+        "quantity": 200
+      }
+    ]
+  },
+  "rules": {
+    "max_resale_price": 1100,
+    "royalty_fee": 500
+  },
+  "artwork": {
+    "image_url": "https://example.com/artwork.jpg",
+    "metadata": {
+      "artist": "Event Artist",
+      "theme": "Music"
+    }
+  }
+}
+```
+
+#### Example Response
+
+```json
+{
+  "id": "evt_new123",
+  "status": "creating",
+  "contract_address": null,
+  "created_at": "2024-01-15T10:30:00Z",
+  "message": "Event is being created. Contract deployment in progress."
+}
+```
+
+## Tickets API
+
+### List Event Tickets
+
+Get all tickets for a specific event.
+
+```http
+GET /events/{event_id}/tickets
+```
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `limit` | integer | No | Number of tickets per page |
+| `offset` | integer | No | Number of tickets to skip |
+| `status` | string | No | Filter by status: `valid`, `used`, `transferred` |
+| `owner` | string | No | Filter by owner wallet address |
+
+#### Example Response
+
+```json
+{
+  "data": [
+    {
+      "token_id": "789",
+      "owner_address": "0x1234567890abcdef...",
+      "tier": "VIP",
+      "price_paid": 1500,
+      "status": "valid",
+      "transfer_history": [
+        {
+          "from": "0xorganizer123...",
+          "to": "0x1234567890abcdef...",
+          "transaction_hash": "0xtx123...",
+          "timestamp": "2024-01-15T10:30:00Z"
+        }
+      ],
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 50,
+    "offset": 0,
+    "total": 48950,
+    "has_more": true
+  }
+}
+```
+
+### Get User Tickets
+
+Retrieve all tickets owned by a specific wallet address.
+
+```http
+GET /users/{wallet_address}/tickets
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `wallet_address` | string | Yes | User's wallet address |
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | No | Filter by status |
+| `event_status` | string | No | Filter by event status |
+
+#### Example Response
+
+```json
+{
+  "data": [
+    {
+      "token_id": "789",
+      "event": {
+        "id": "evt_123456",
+        "name": "Concert Name",
+        "date": "2026-10-15T19:00:00Z",
+        "venue": "Venue Name"
+      },
+      "tier": "VIP",
+      "price_paid": 1500,
+      "status": "valid",
+      "contract_address": "0x1234567890abcdef...",
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+  ],
+  "total": 5
+}
+```
+
+### Transfer Ticket
+
+Transfer a ticket to another wallet address.
+
+```http
+POST /tickets/{token_id}/transfer
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `token_id` | string | Yes | Token ID of the ticket |
+
+#### Request Body
+
+```json
+{
+  "to_address": "0xrecipient123...",
+  "message": "Happy birthday! Enjoy the concert!"
+}
+```
+
+#### Example Response
+
+```json
+{
+  "transaction_hash": "0xtransfer123...",
+  "status": "pending",
+  "from_address": "0x1234567890abcdef...",
+  "to_address": "0xrecipient123...",
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+## Secondary Market API
+
+### List Ticket for Sale
+
+List a ticket on the secondary marketplace.
+
+```http
+POST /tickets/{token_id}/resell
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `token_id` | string | Yes | Token ID of the ticket |
+
+#### Request Body
+
+```json
+{
+  "price": "1500.00",
+  "currency": "INR",
+  "expires_at": "2026-10-14T19:00:00Z"
+}
+```
+
+#### Example Response
+
+```json
+{
+  "listing_id": "list_456789",
+  "token_id": "789",
+  "seller_address": "0x1234567890abcdef...",
+  "price": "1500.00",
+  "currency": "INR",
+  "status": "listed",
+  "created_at": "2024-01-15T10:30:00Z",
+  "expires_at": "2026-10-14T19:00:00Z"
+}
+```
+
+### Buy Listed Ticket
+
+Purchase a ticket from the secondary market.
+
+```http
+POST /listings/{listing_id}/buy
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `listing_id` | string | Yes | Listing identifier |
+
+#### Request Body
+
+```json
+{
+  "payment_method": "upi",
+  "payment_details": {
+    "upi_id": "user@paytm"
+  }
+}
+```
+
+#### Example Response
+
+```json
+{
+  "transaction_hash": "0xpurchase123...",
+  "status": "pending",
+  "buyer_address": "0xbuyer123...",
+  "seller_address": "0x1234567890abcdef...",
+  "price": "1500.00",
+  "royalty_amount": "75.00",
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+### Get Secondary Market Listings
+
+Retrieve active listings for an event.
+
+```http
+GET /events/{event_id}/listings
+```
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `limit` | integer | No | Number of listings per page |
+| `offset` | integer | No | Number of listings to skip |
+| `tier` | string | No | Filter by ticket tier |
+| `max_price` | number | No | Filter by maximum price |
+
+#### Example Response
+
+```json
+{
+  "data": [
+    {
+      "listing_id": "list_456789",
+      "token_id": "789",
+      "tier": "VIP",
+      "seller_address": "0x1234567890abcdef...",
+      "price": "1500.00",
+      "currency": "INR",
+      "original_price": "1500.00",
+      "price_markup": 0,
+      "created_at": "2024-01-15T10:30:00Z",
+      "expires_at": "2026-10-14T19:00:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "offset": 0,
+    "total": 45,
+    "has_more": true
+  }
+}
+```
+
+## Analytics API
+
+### Get Event Analytics
+
+Retrieve analytics data for an event (Organizer only).
+
+```http
+GET /events/{event_id}/analytics
+```
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `period` | string | No | Time period: `day`, `week`, `month` |
+| `start_date` | string | No | Start date (ISO 8601) |
+| `end_date` | string | No | End date (ISO 8601) |
+
+#### Example Response
+
+```json
+{
+  "event_id": "evt_123456",
+  "period": {
+    "start": "2024-01-01T00:00:00Z",
+    "end": "2024-01-31T23:59:59Z"
+  },
+  "sales": {
+    "primary": {
+      "tickets_sold": 48950,
+      "revenue": 36712500,
+      "average_price": 750
+    },
+    "secondary": {
+      "tickets_resold": 1250,
+      "resale_volume": 1875000,
+      "average_resale_price": 1500,
+      "royalty_earned": 93750
+    }
+  },
+  "demand": {
+    "peak_hours": ["10:00", "14:00", "18:00"],
+    "geographic_distribution": {
+      "Delhi": 15000,
+      "Mumbai": 12000,
+      "Bangalore": 8000,
+      "Other": 13950
+    }
+  },
+  "attendees": {
+    "total_unique": 48950,
+    "repeat_attendees": 12500,
+    "new_attendees": 36450
+  }
+}
+```
+
+### Get User Analytics
+
+Get analytics for a specific user's ticket activity.
+
+```http
+GET /users/{wallet_address}/analytics
+```
+
+#### Example Response
+
+```json
+{
+  "wallet_address": "0x1234567890abcdef...",
+  "total_tickets_purchased": 15,
+  "total_tickets_sold": 3,
+  "total_events_attended": 12,
+  "favorite_categories": ["Music", "Sports"],
+  "spending_summary": {
+    "total_spent": 22500,
+    "average_price": 1500,
+    "currency": "INR"
+  },
+  "loyalty_score": 85
+}
+```
+
+## Webhooks
+
+Configure webhooks to receive real-time notifications about events.
+
+### Create Webhook
+
+```http
+POST /webhooks
+```
+
+#### Request Body
+
+```json
+{
+  "url": "https://your-app.com/webhooks/momentmm",
+  "events": [
+    "ticket.purchased",
+    "ticket.transferred",
+    "ticket.resold"
+  ],
+  "secret": "your_webhook_secret"
+}
+```
+
+#### Example Response
+
+```json
+{
+  "webhook_id": "wh_123456",
+  "url": "https://your-app.com/webhooks/momentmm",
+  "events": [
+    "ticket.purchased",
+    "ticket.transferred",
+    "ticket.resold"
+  ],
+  "status": "active",
+  "created_at": "2024-01-15T10:30:00Z"
+}
+```
+
+### Webhook Event Types
+
+| Event | Description | Payload |
+|-------|-------------|---------|
+| `ticket.purchased` | Ticket purchased in primary sale | Ticket details, buyer info |
+| `ticket.transferred` | Ticket transferred between wallets | Transfer details, parties |
+| `ticket.resold` | Ticket sold on secondary market | Sale details, royalty info |
+| `event.created` | New event created | Event details |
+| `event.completed` | Event has finished | Event summary, final stats |
+
+### Webhook Security
+
+All webhooks include a signature header for verification:
+
+```http
+X-Momentmm-Signature: sha256=abc123...
+```
+
+Verify the signature in your webhook handler:
+
+```javascript
+const crypto = require('crypto');
+
+function verifyWebhookSignature(payload, signature, secret) {
+  const expectedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex');
+  
+  return `sha256=${expectedSignature}` === signature;
+}
+```
+
+## SDKs and Libraries
+
+### JavaScript/Node.js
+
+```bash
+npm install momentmm-sdk
+```
+
+```javascript
+import Momentmm from 'momentmm-sdk';
+
+const client = new Momentmm({
+  apiKey: 'your_api_key',
+  environment: 'production'
+});
+
+// Get events
+const events = await client.events.list({
+  limit: 20,
+  status: 'upcoming'
+});
+
+// Purchase ticket
+const purchase = await client.tickets.purchase({
+  eventId: 'evt_123',
+  tier: 'VIP',
+  quantity: 2,
+  paymentMethod: 'upi'
+});
+```
+
+### Python
+
+```bash
+pip install momentmm-python
+```
+
+```python
+from momentmm import MomentmmClient
+
+client = MomentmmClient(api_key='your_api_key')
+
+# Get events
+events = client.events.list(limit=20, status='upcoming')
+
+# Purchase ticket
+purchase = client.tickets.purchase(
+    event_id='evt_123',
+    tier='VIP',
+    quantity=2,
+    payment_method='upi'
+)
+```
+
+## Testing
+
+### Sandbox Environment
+
+Use our sandbox environment for testing:
+
+```http
+Base URL: https://sandbox-api.momentmm.xyz/v1
+```
+
+### Test Cards
+
+For testing payment functionality:
+
+| Card Number | Description |
+|-------------|-------------|
+| `4242424242424242` | Successful payment |
+| `4000000000000002` | Declined payment |
+| `4000000000009995` | Insufficient funds |
+
+### Test Wallet Addresses
+
+```javascript
+// Test wallet addresses for development
+const testWallets = {
+  organizer: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+  buyer: '0x8ba1f109551bD432803012645Hac136c6c4d2C5',
+  seller: '0x1234567890123456789012345678901234567890'
+};
+```
+
+---
+
+*For smart contract integration, see our [Smart Contract Reference →](/smart-contracts)*

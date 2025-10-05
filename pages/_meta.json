@@ -1,15 +1,26 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
-  "about": {
-    "title": "About",
+  "getting-started": "Getting Started",
+  "for-organizers": "For Event Organizers",
+  "for-fans": "For Fans & Attendees",
+  "technical": {
+    "title": "Technical Documentation",
     "type": "page"
   },
-  "contact": {
-    "title": "Contact ↗",
-    "type": "page",
-    "href": "https://twitter.com/shuding_",
-    "newWindow": true
+  "api-reference": {
+    "title": "API Reference",
+    "type": "page"
+  },
+  "smart-contracts": {
+    "title": "Smart Contracts",
+    "type": "page"
+  },
+  "ecosystem": {
+    "title": "Ecosystem & Token",
+    "type": "page"
+  },
+  "support": {
+    "title": "Support",
+    "type": "page"
   }
 }
